@@ -1,0 +1,72 @@
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    background-image: url('../images/Blue_Origin_Feather.svg.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+/* #footer-div {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    border: 1px solid black;
+    text-align: center;
+    width: 100%;
+} */
+
+#main-div {
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
+    border: 1px solid black;
+}
+
+.main-button {
+    font-size: 80px;
+    font-style: italic;
+    font-family: cursive;
+}
+
+#geex {
+    background-image: url('../images/geex.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-shadow:
+    -2px -3px 0 pink;
+}
+
+#xeex {
+    background-image: url('../images/XEEx.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-shadow:
+    -2px -3px 0 pink;
+}
+
+#alabama {
+    background-image: url('../images/cow3.jfif');
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-shadow:
+    -2px -3px 0 pink;
+}
+
+#veex {
+    background-image: url('../images/VEEx.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    text-shadow:
+    -2px -3px 0 pink;
+}
+
+.main-button:hover {
+    color: blue;
+}
+
+.footer-button:hover {
+    color: red;
+}

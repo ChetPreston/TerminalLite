@@ -1,0 +1,111 @@
+#veex-btn, #geex-btn, #home-btn, #alabama-btn, #xeex-btn {
+    height:50px;
+    font-weight: bold;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 23px;
+    border: 1px solid pink;
+    border-radius: 8px;
+    background-color: black;
+    color: pink;
+    margin-right: 3px;
+    text-align: center;
+    width: 21%;
+}
+
+#veex-btn:hover, #geex-btn:hover, #home-btn:hover, #alabama-btn:hover, #xeex-btn:hover { 
+    font-style: italic;
+    font-size: 26px;
+    background-color: rgb(37, 37, 37);
+    text-shadow:
+        2px 2px 0 rgb(28, 190, 240);
+}
+#header-div {
+    display: flex;
+    justify-content: space-between;
+    height: 60px;
+    margin-bottom: 0px;
+}
+#banner {
+    display: flex;
+    justify-content: space-around;
+    width:33%;
+
+    align-items: center;
+}
+#accounts {
+    display: flex;
+    justify-content: space-around;
+    width: 33%;
+
+    align-content: center;
+}
+#feather {
+    display: flex;
+    width: 33%;
+
+    justify-content: center;
+}
+
+#create-account{
+    margin-top: auto;
+    margin-bottom: auto;
+    min-height: 27px;
+    border-radius: 8px;
+
+}
+#credenitals {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 28%;
+}
+#login-div {
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 20%;
+}
+
+#logout-div{
+    display: flex;
+    flex-direction: column;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 18%;
+}
+#login-msgs {
+    display: flex;
+    font-size: 20px;
+    align-content: center;
+    justify-content: space-around;
+    margin-top: auto;
+    margin-bottom: auto;
+    width: 27%;
+}
+
+#username, #password{
+    width: 100%;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}
+#login-button, #logout-button{
+    width: 100%;
+    min-height: 27px;
+    border-radius: 8px;
+}
+#login-button:hover, #logout-button:hover, #create-account:hover {
+    font-weight: bold;
+    background-color: black;
+    color: lightblue
+}
+#login-status {
+    color: green;
+    margin-top: 2px;
+    margin-bottom: 2px;
+}
+#login-msg {
+    color: red;
+    margin-top: 2px;
+}

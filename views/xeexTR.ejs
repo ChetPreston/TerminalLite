@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <link rel="stylesheet" href="css/veexTR.css">
+        <%- include('header'); -%>
+    </head>
+    <body>
+        <button id='test-xeex'></button>
+        <h3 id="terminal-title">XEEx Terminal</h3>
+        <div id='legend-div'>
+            <p>
+                <label for="open-legend" class="legend-label">Available</label>
+                <button id="open-legend"></button>
+                <label for="pre-legend" class="legend-label">Pre-Allocated</label>
+                <button id="pre-legend"></button>
+                <label for="taken-legend" class="legend-label">Taken</label>
+                <button id="taken-legend"></button>
+                <label for='show-val'>Show Value</label>
+                <input type="checkbox" id="show-val">
+            </p>
+        </div>
+     
+        <div id="das">
+            <div id="fvc-div">
+                <div id="div-id">
+                    <p id="read-device"></p>
+                    <p id="read-name"></p>
+                    <p id="read-ip"></p>
+                    <p id="read-chan"></p>
+                </div>
+                <h3>FVC DO Channels</h3>
+            </div>
+            <div id="fvc-div-di">
+                <h3>FVC DI Channels</h3>
+                <div class='display-div'>
+                    <p class='display-read' id="read-device2"></p>
+                    <p class='display-read' id="read-name2"></p>
+                    <p class='display-read' id="read-ip2"></p>
+                    <p class='display-read' id="read-chan2"></p>
+                </div>
+            </div>
+            <div id="das-div-geex">
+                <h3>DAS Channels</h3>
+                <div class='display-div'>
+                    <p class='display-read' id="read-device3"></p>
+                    <p class='display-read' id="read-name3"></p>
+                    <p class='display-read' id="read-ip3"></p>
+                    <p class='display-read' id="read-chan3"></p>
+                </div>
+            </div>
+        </div>
+        <script src="js/xeexTR.js"></script>
+    </body> 
+</html>

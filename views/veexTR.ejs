@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <link rel="stylesheet" href="css/veexTR.css">
+        <%- include('header'); -%>
+    </head>
+    <body>
+        <h3 id="terminal-title">VEEx Terminal</h3>
+        <div id='legend-div'>
+            <p>
+                <label for="open-legend" class="legend-label">Available</label>
+                <button id="open-legend"></button>
+                <label for="pre-legend" class="legend-label">Pre-Allocated</label>
+                <button id="pre-legend"></button>
+                <label for="taken-legend" class="legend-label">Taken</label>
+                <button id="taken-legend"></button>
+                <label for='show-val'>Show Value</label>
+                <input type="checkbox" id="show-val">
+            </p>
+        </div>
+        <div id="das">
+            <div id="first-das">
+                <div class="das-text">
+                    <p>DAS1 6150 C1</p>
+                    <p>DAS1 6150 C2</p>
+                    <p>DAS1 6150 C3</p>
+                    <p>DAS1 6150 C4</p>
+                    <p>DAS1 6150 C5</p>
+                    <p>DAS1 6100 C1</p>
+                    <p>DAS1 6100 C2</p>
+                    <p>DAS1 6100 C3</p>
+                    <p>DAS1 6100 C4</p>     
+                </div>
+                <div class="das-btns">
+                    <div  class="das1" id="das-one01"></div>
+                    <div  class="das1" id="das-one02"></div>
+                    <div  class="das1" id="das-one03"></div>
+                    <div  class="das1" id="das-one04"></div>
+                    <div  class="das1" id="das-one05"></div>
+                    <div  class="das1" id="das-one11"></div>
+                    <div  class="das1" id="das-one12"></div>
+                    <div  class="das1" id="das-one13"></div>
+                    <div  class="das1" id="das-one14"></div>
+                </div>
+            </div>
+            <div id="second-das">
+                <div class="das-text">
+                    <p>DAS2 6150 C1</p>
+                    <p>DAS2 6150 C2</p>
+                    <p>DAS2 6100 C1</p>
+                    <p>DAS2 6100 C2</p>    
+                </div>
+                <div class="das-btns">
+                    <div  class="das2" id="das-two01"></div>
+                    <div  class="das2" id="das-two02"></div>
+                    <div  class="das2" id="das-two11"></div>
+                    <div  class="das2" id="das-two12"></div>
+                </div>
+            </div>
+            <div id="first-fvc">
+                <div class="das-text">
+                    <p>FVC1 DO 0-7</p>
+                    <p>FVC1 DO 8-15</p>
+                    <p>FVC1 DI C0 0-7</p>
+                    <p>FVC1 DI C0 8-15</p>
+                    <p>FVC1 DI C1 0-7</p>
+                    <p>FVC1 DI C1 8-15</p>     
+                </div>
+                <div class="das-btns">
+                    <div class="fvc1" id="fvc-one1">FVC1</div>
+                    <div class="fvc1" id="fvc-one2">FVC1</div>
+                    <div class="fvc1" id="fvc-one1di">FVC1</div>
+                    <div class="fvc1" id="fvc-one2di">FVC1</div>
+                    <div class="fvc1" id="fvc-one3di">FVC1</div>
+                    <div class="fvc1" id="fvc-one4di">FVC1</div>
+                </div>
+            </div>
+            <div id="second-fvc">
+                <div class="das-text">
+                    <p>FVC2 DO 0-7</p>
+                    <p>FVC2 DO 8-15</p>
+                    <p>FVC2 DI C0 0-7</p>
+                    <p>FVC2 DI C0 8-15</p>
+                    <p>FVC2 DI C1 0-7</p>
+                    <p>FVC2 DI C1 8-15</p>     
+                </div>
+                <div class="das-btns">
+                    <div class="fvc2" id="fvc-two1">FVC2</div>
+                    <div class="fvc2" id="fvc-two2">FVC2</div>
+                    <div class="fvc2" id="fvc-two1di">FVC2</div>
+                    <div class="fvc2" id="fvc-two2di">FVC2</div>
+                    <div class="fvc2" id="fvc-two3di">FVC2</div>
+                    <div class="fvc2" id="fvc-two4di">FVC2</div>
+                </div>
+            </div>
+        </div>
+        <div id="div-id">
+            <p id="read-name"></p>
+            <p id="read-ip"></p>
+            <p id="read-chan"></p>
+            <p id="read-val"></p>
+        </div>
+        <script src="js/veexTR.js"></script>
+    </body> 
+</html>

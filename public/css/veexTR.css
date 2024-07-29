@@ -1,0 +1,192 @@
+body {
+    background-color: black;
+}
+
+#db-button {
+    height: 30px;
+    font-weight: bold;
+    background-color:black;
+    color: orange;
+}
+
+#terminal-title {
+    text-shadow:
+        -2px -2px 0 rgb(4, 54, 163);
+    font-size: 45px;
+    margin-bottom: 5px;
+    margin-top: 10px;
+    color: orange;
+    text-align: center;
+}
+
+#test-button{
+    margin-top: 4px;
+    background-color: red;
+    margin-bottom: 6px;
+}
+.das-icon {
+    width: 18px;
+    height: 18px;
+    padding: 1px;
+}
+.das-icon:hover {
+    background-color:rgb(49, 49, 49);
+    color:rgb(226, 226, 226);
+}
+
+#das {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: center;
+    color: rgb(226, 226, 226);
+    font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    font-size:15px;
+}
+
+#read-ip, #read-name, #read-chan, #read-device {
+    font-size: 18px;
+    font-weight: bold;
+    background-color: black;
+    color: #fa7325;
+    text-align: left;
+    margin: 0px 
+}
+
+#div-id {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 60%;
+    margin-left: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#legend-div {
+    display: flex;
+    justify-content: space-evenly;
+    text-align: center;
+}
+
+.legend-label {
+    color: whitesmoke;
+    align-content: center;
+    justify-content: center;
+    font-size: 16px;
+    font-family: 'Times New Roman', Times, serif;
+}
+
+#open-legend, #taken-legend, #pre-legend {
+    height: 21px;
+    width: 21px;
+    margin-right: 25px;
+}
+
+#open-legend {
+    background-color: greenyellow;
+}
+#taken-legend {
+    background-color: brown;
+}
+#pre-legend { 
+    background-color: lightskyblue;
+}
+
+p {
+    color: whitesmoke;
+    margin-top:1px;
+    margin-bottom:0px;
+    align-content: center;
+}
+
+#first-fvc, #first-das, #second-das, #second-fvc {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    padding: 2px;
+    width: 68%;
+    margin-top: 5px;
+}
+
+.das-text {
+    order: 1;
+    width: 10%
+}
+
+.das-btns {
+    order: 2;
+    width: 90%;
+}
+
+/* .das1 {
+    color:darkgreen;
+}
+
+.das2 {
+    color: darkred;
+} */
+
+
+
+/* .fvc1 {
+    color: blueviolet;
+}
+
+.fvc2 {
+    color:rgb(16, 45, 211);
+} */
+
+#first-das, #first-fvc {
+    /* border: 2px solid darkgreen; */
+    background-color: rgb(0, 0, 0);
+}
+
+#second-das, #second-fvc {
+    /* border: 2px solid rgb(197, 142, 40); */
+    background-color: rgb(49, 49, 49);
+}
+
+/* #first-fvc {
+    padding: 2px;
+    background-color: rgb(0, 0, 0);
+    width: 70%;
+    margin-top: 5px;
+}
+
+#second-fvc {
+    padding: 2px;
+    background-color: rgb(49, 49, 49);
+    width: 70%;
+    margin-top: 5px;
+} */
+
+#fvc-div, #fvc-div-di, #das-div-geex {
+    width: 90%;
+    text-align: left;
+}
+
+.display-div {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    width: 60%;
+    margin-left: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.display-read {
+    font-size: 18px;
+    font-weight: bold;
+    background-color: black;
+    color: #fa7325;
+    text-align: left;
+    margin: 0px 
+}
+
+#show-val {
+    height: 18px;
+    width: 18px;
+}
