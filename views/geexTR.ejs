@@ -6,7 +6,6 @@
         <%- include('header'); -%>
     </head>
     <body>
-        <button id='test-geex'></button>
         <h3 id="terminal-title">GEEx Terminal</h3>
         <div id='legend-div'>
             <p>
@@ -20,37 +19,48 @@
                 <input type="checkbox" id="show-val">
             </p>
         </div>
-     
-        <div id="das">
-            <div id="fvc-div">
-                <div id="div-id">
-                    <p id="read-device"></p>
-                    <p id="read-name"></p>
-                    <p id="read-ip"></p>
-                    <p id="read-chan"></p>
-                </div>
-                <h3>FVC DO Channels</h3>
+        <div id="search-div">
+            <div id="search-form-div">
+                <input type="text" name="search" id='search-box' autocomplete="off">
+                <button id="search-btn">Search</button>
             </div>
-            <div id="fvc-div-di">
-                <h3>FVC DI Channels</h3>
-                <div class='display-div'>
-                    <p class='display-read' id="read-device2"></p>
-                    <p class='display-read' id="read-name2"></p>
-                    <p class='display-read' id="read-ip2"></p>
-                    <p class='display-read' id="read-chan2"></p>
-                </div>
-            </div>
-            <div id="das-div-geex">
-                <h3>DAS Channels</h3>
-                <div class='display-div'>
-                    <p class='display-read' id="read-device3"></p>
-                    <p class='display-read' id="read-name3"></p>
-                    <p class='display-read' id="read-ip3"></p>
-                    <p class='display-read' id="read-chan3"></p>
-                    <p class='display-read' id="read-val3"></p>
-                </div>
+            <div id="search-results-div">
+
             </div>
         </div>
+        <div class="draggable-window" id="draggableWindow">
+            <div class="window-header" id="windowHeader">Display Info</div>
+            <div class="window-content">
+               
+                <div id="display-info" class="display-read"></div>
+            </div>
+          </div>
+        <div>
+            <h2>DAS CHANNELS</h2>
+            <!-- <div id="das1-target" class="display-read"></div> -->
+            <div id="das"></div>
+        </div>
+
+        <div>
+            <h2>FVC DO CHANNELS</h2>
+            <!-- <div id="fvc-do-target"></div> -->
+            <div id="fvc-do"></div>
+        </div>
+        <div>
+            <h2>FVC DI CHANNELS</h2>
+            
+            <!-- <div id="fvc-di-target"></div> -->
+            <div id="fvc-di"></div>
+        </div>
+        <div id="custom-menu" class="custom-menu">
+            <ul>
+            <li data-action="action1" id="display-classes">Read Value</li>
+            <li data-action="action2">Write Name</li>
+            <li data-action="action3">Write Value</li>
+            </ul>
+        </div>
+        <button id='svn-update'>UPDATE</button>
+        <button id="svn-commit">COMMIT</button>
         <script src="js/geexTR.js"></script>
     </body> 
 </html>

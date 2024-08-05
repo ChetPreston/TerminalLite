@@ -9,56 +9,335 @@ const readChan = document.getElementById("read-chan")
 const showVal = document.getElementById('show-val')
 // Loading all of the das divs
 
-const dasOne01 = document.getElementById("das-one01")
-const dasOne02 = document.getElementById("das-one02")
-const dasOne03 = document.getElementById("das-one03")
-const dasOne04 = document.getElementById("das-one04")
-const dasOne05 = document.getElementById("das-one05")
-const dasOne11 = document.getElementById("das-one11")
-const dasOne12 = document.getElementById("das-one12")
-const dasOne13 = document.getElementById("das-one13")
-const dasOne14 = document.getElementById("das-one14")
-const dasTwo01 = document.getElementById("das-two01")
-const dasTwo02 = document.getElementById("das-two02")
-const dasTwo11 = document.getElementById("das-two11")
-const dasTwo12 = document.getElementById("das-two12")
-const fvcOne1 = document.getElementById('fvc-one1')
-const fvcOne2 = document.getElementById('fvc-one2')
-const fvcTwo1 = document.getElementById('fvc-two1')
-const fvcTwo2 = document.getElementById('fvc-two2')
-const fvcOneDI1 = document.getElementById('fvc-one1di')
-const fvcOneDI2 = document.getElementById('fvc-one2di')
-const fvcOneDI3 = document.getElementById('fvc-one3di')
-const fvcOneDI4 = document.getElementById('fvc-one4di')
-const fvcTwoDI1 = document.getElementById('fvc-two1di')
-const fvcTwoDI2 = document.getElementById('fvc-two2di')
-const fvcTwoDI3 = document.getElementById('fvc-two3di')
-const fvcTwoDI4 = document.getElementById('fvc-two4di')
+const displayInfo = document.getElementById('display-info')
+const dasDiv = document.getElementById('das')
+const fvcDoDiv = document.getElementById('fvc-do')
+const fvcDiDiv = document.getElementById('fvc-di')
+const displayClasses = document.getElementById('display-classes')
+const searchBox = document.getElementById('search-box')
+const searchBtn = document.querySelector('#search-btn')
+const svnCommit = document.querySelector('#svn-commit')
+const svnUpdate = document.querySelector('#svn-update')
+let writeName = document.getElementById('write-name')
+var menu = document.getElementById('custom-menu')
+let writeValue = document.getElementById('write-value')
+const fold = 'C:/SVN/Configs_and_Batches/Test_Stand_Configs/VEEx/system_configs'
+
+
+let jsonData
+let newTag
+let neName
+let outData
+// das1()
+// das2()
+// fvc1()
+// fvc2()
+// fvcDI1()
+// fvcDI2()
+
+// Initialize all of the terminal ports
+function getIO() {
+    getReq('api/tr/veex/das/VEExDAS1').then((data) => {
+        jsonData = data.TAGs;
+        getDAS(jsonData, 'DAS1')
+    })
+    getReq('api/tr/veex/das/VEExDAS2').then((data) => {
+        jsonData = data.TAGs;
+        getDAS(jsonData, 'DAS2')
+    })
+    getReq(`api/tr/veex/fvc/VEEx_FVC1_DI/2`).then((data) => {
+        getFVC_DI(data, 'FVC-DI 1')
+    })
+    getReq(`api/tr/veex/fvc/VEEx_FVC2_DI/2`).then((data) => {
+        getFVC_DI(data, 'FVC-DI 2')
+    })
+    getReq(`api/tr/veex/fvc/VEEx_FVC1_Valve_Configuration/104`).then((data) => {
+        getFVC(data, 'FVC-DO 1')
+    })
+    getReq(`api/tr/veex/fvc/VEEx_FVC2_Valve_Configuration/77`).then((data) => {
+        getFVC(data, 'FVC-DO 2')
+    })
+}
+
+getIO()
+// btns = document.getElementsByTagName('button')
+// console.log(btns)
+
+function resetBtns() {
+    dasDiv.innerHTML = ''
+    fvcDiDiv.innerHTML = ''
+    fvcDoDiv.innerHTML = ''
+}
 
 
 
-let jsonData;
-das1()
-das2()
-fvc1()
-fvc2()
-fvcDI1()
-fvcDI2()
+document.addEventListener('click', function() {
+    menu.style.display = 'none';
+  });
 
+searchBox.addEventListener('keypress', function(e) {
+    if (this.value) {
+    if (e.key === 'Enter') {
+        e.preventDefault()
+        searchBtn.click();
+        searchBox.value = ''
+    }
+}
+})
+// Perform SVN Commands
+svnCommit.addEventListener('click', function() {
+    enterPW = prompt('Enter password')
+    obj = {
+        mode: 'commit',
+        site: 'VEEx',
+        enterPW: enterPW
+    }
+    postReq(obj, 'svn')
+})
+svnUpdate.addEventListener('click', function() {
+    obj = {
+        mode: 'update',
+        site: 'VEEx',
+        enterPW: 'nothing'
+    }
+    postReq(obj, 'svn')
+})
+
+
+// Perform Search
+searchBtn.addEventListener('click', function(e) {
+    e.preventDefault()
+    searchData = {
+    search: searchBox.value
+    }
+    resetBtns() //Removes old buttons
+    setTimeout(function() {}, 5000)
+    getIO() // reset all colors
+    let btns = document.getElementsByTagName('button');
+    setTimeout(function() {
+        postReq(searchData, 'api/tr/veex/search').then((data) => {
+            const searchResults = data.results;
+            if (searchResults) {
+                console.log(searchResults.length)
+                // console.log(searchResults[0][1])
+                // console.log(searchResults[0][0])
+            }
+            const searchDiv = document.getElementById('search-results-div')
+            searchDiv.innerHTML = ''
+            for (let i =0; i < data.results.length; i++) {
+                if (data.results[i][1].includes('DAS')) {
+                    sName = data.results[i][0].Name 
+                    sIP = data.results[i][0].IP
+                    sChan = data.results[i][0].Channel
+                    searchDiv.innerHTML += /*html*/`
+                    <ul>${sName} - ${data.results[i][1]} - ${sIP};  Channel ${sChan}</ul>
+                    `
+                    for (let j=0; j<btns.length; j++) {
+                        if (btns[j].title.toLowerCase().includes(sName.toLowerCase())) {
+                            btns[j].style.color='red'
+                            btns[j].style.fontWeight='bold'
+                        }
+                    }
+                }
+                else if (data.results[i][1].includes('DO')) {
+                    sName = data.results[i][0][0]
+                    sPort = data.results[i][0][2]
+                    sChan = data.results[i][0][3]
+                    searchDiv.innerHTML += /*html*/`
+                    <ul>${sName} - ${data.results[i][1]} - Port: ${sPort}, Channel: ${sChan}</ul>
+                    `
+                    for (let j=0; j<btns.length; j++) {
+                        if (btns[j].title.toLowerCase().includes(sName.toLowerCase())) {
+                            btns[j].style.color='red'
+                            btns[j].style.fontWeight='bold'
+                        }
+                    }
+                }
+                else if (data.results[i][1].includes('DI')) {
+                    sName = data.results[i][0][0]
+                    sCard = data.results[i][0][1]
+                    sPort = data.results[i][0][2]
+                    sChan = data.results[i][0][3]
+                    searchDiv.innerHTML += /*html*/`
+                    <ul>${sName} - ${data.results[i][1]} - Card: ${sCard}, Port: ${sPort}, Channel: ${sChan}</ul>
+                    `
+                    for (let j=0; j<btns.length; j++) {
+                        if (btns[j].title.toLowerCase().includes(sName.toLowerCase())) {
+                            btns[j].style.color='red'
+                            btns[j].style.fontWeight='bold'
+                        }
+                    }
+
+                }
+
+            }
+        })
+    }, 300)
+})
+
+
+// Perform Menu Options
+menu.addEventListener('click', function(e) {
+    var action = e.target.getAttribute('data-action')
+    if (action === 'action1') {
+        var buttonClasses = e.target.classList
+        console.log('Clicked on choice:', action)
+        const cName = e.target.classList.value
+        console.log(e.target.classList.value)
+        let dataInfo = JSON.parse(e.target.dataset.info)
+        console.log(dataInfo)
+        // console.log(e.target.textContent)
+        // cVal = fetch(`http://veex.blueorigin.com:5000/Stm/TC-E0930`)
+        console.log(fetch(`http://veex.blueorigin.com:5000/Stm/TC-E0930`))
+        if (cName.includes('DAS')) {
+            
+        }
+        else if (cName.includes('FVC-DI')) {
+
+        }
+        else if (cName.includes('FVC-DO')) {
+
+        }
+        displayInfo.innerHTML = `
+        <p>Hey There!</p>
+        `
+    }
+    if (action === 'action2') {
+        var buttonClasses = e.target.classList
+        console.log('Clicked on choice:', action)
+        const cName = e.target.classList.value
+        console.log(e.target.classList.value)
+        let dataInfo = JSON.parse(e.target.dataset.info)
+        newCh = dataInfo.ch
+        newName = prompt('Enter the new tag name:')
+        console.log(cName)
+        if (newName) {
+            enterPW = prompt('Enter password') 
+            if (enterPW === 'frankortiz') {
+                if (cName.includes('DAS1')) {
+                    outData = csvObj('VEExDAS1', newCh, newName)
+                    postReq(outData, 'api/tr/veex/das')
+                }
+                if (cName.includes('DAS2')) {
+                    outData = csvObj('VEExDAS2', newCh, newName)
+                    postReq(outData, 'api/tr/veex/das')
+                }
+                else if (cName.includes('FVC-DI 1')) {
+                    outData = csvObj('VEEx_FVC1_DI', newCh, newName)
+                    console.log(outData)
+                    postReq(outData, `api/tr/veex/fvc`)
+                }
+                else if (cName.includes('FVC-DI 2')) {
+                    outData = csvObj('VEEx_FVC2_DI', newCh, newName)
+                    console.log(outData)
+                    postReq(outData, `api/tr/veex/fvc`)
+                }
+                else if (cName.includes('FVC-DO 1')) {
+                    outData = csvObj('VEEx_FVC1_Valve_Configuration', newCh, newName)
+                    console.log(outData)
+                    postReq(outData, `api/tr/veex/fvcdo`)
+                }
+                else if (cName.includes('FVC-DO 2')) {
+                    outData = csvObj('VEEx_FVC1_Valve_Configuration', newCh, newName)
+                    console.log(outData)
+                    postReq(outData, `api/tr/veex/fvcdo`)
+                }
+         
+
+                else if (cName.includes('FVC-DO')) {
+
+                }
+                window.location.reload()
+            }
+            else alert('Wrong password')
+        }
+        
+    }
+    if (action === 'action3') {
+        console.log('Clicked on choice:', action)
+        displayInfo.innerHTML = `
+        <p></p>
+        `
+    }
+})
+
+
+
+function getDAS(data, name) {
+    const arrayL = data.length
+    for (let i = 0; i < arrayL; i++) {
+        let b = document.createElement('button')
+        // b.title = data[i].Name
+        b.textContent = i
+        b.className = `das-icon ${name}`
+        // b.style.width = btnW + 'px'
+        // b.style.height = btnW + 'px'
+        b.addEventListener('click', function() {
+            displayInfo.innerHTML = `
+            <p>Device = ${name}</p>
+            <p>IP = ${data[i].IP}</p>
+            <p>Name = ${data[i].Name}</p>
+            <p>Channel = ${data[i].Channel}</p>
+            `
+            if (showVal.checked) window.open(`https://veex.blueorigin.com:5001/Stm/${data[i].Name}`)
+        })
+        b = colorIcons(b, data[i].Name, i)
+        dasDiv.appendChild(b)
+    }
+    const br = document.createElement('br')
+    dasDiv.appendChild(br)
+}
+
+function getFVC(data, name) {
+    const arrayL = data.length
+    for (let i = 0; i < arrayL; i++) {
+        let b = document.createElement('button')
+        b.textContent = i
+        b.className = `das-icon ${name}`
+        b.addEventListener('click', function() {
+            displayInfo.innerHTML = `
+            <p>Device = ${name}</p>
+            <p>Name = ${data[i][0]}</p>
+            <p>Port = ${data[i][3]}</p>
+            <p>Channel = ${data[i][4]}</p>
+            `
+            if (showVal.checked) window.open(`https://veex.blueorigin.com:5001/Stm/${data[i][0]}`)
+        })
+        b = colorIcons(b, data[i][0], i)
+        fvcDoDiv.appendChild(b)
+    }
+    const br = document.createElement('br')
+    fvcDoDiv.appendChild(br)
+}
+
+function getFVC_DI(data, name) {
+    const arrayL = data.length
+    for (let i = 0; i < arrayL; i++) {
+        let b = document.createElement('button')
+        b.textContent = i
+        b.className = `das-icon ${name}`
+        b.addEventListener('click', function() {
+            displayInfo.innerHTML = `
+            <p>Device = ${name}</p>
+            <p>Name = ${data[i][0]}</p>
+            <p>Card and Port = ${data[i][1]}, ${data[i][2]}</p>
+            <p>Channel = ${data[i][3]}</p>
+            `
+            if (showVal.checked) window.open(`https://veex.blueorigin.com:5001/Stm/${data[i][0]}`)
+        })
+        b = colorIcons(b, data[i][0], i)
+        
+        fvcDiDiv.appendChild(b)
+    }
+    const br = document.createElement('br')
+    fvcDiDiv.appendChild(br)
+}
 
 // This will grab and display an object stored on the server (no file)
 function das1() { 
     return getReq(`api/tr/veex/das1`).then((data) => {
         jsonData = data.TAGs;
-        // dasOne01.innerHTML = 'DAS1 6150 C1 '
-        // dasOne02.innerHTML = 'DAS1 6150 C2 '
-        // dasOne03.innerHTML = 'DAS1 6150 C3 '
-        // dasOne04.innerHTML = 'DAS1 6150 C4 '
-        // dasOne05.innerHTML = 'DAS1 6150 C5 '
-        // dasOne11.innerHTML = 'DAS1 6100 C1 '
-        // dasOne12.innerHTML = 'DAS1 6100 C2 '
-        // dasOne13.innerHTML = 'DAS1 6100 C3 '
-        // dasOne14.innerHTML = 'DAS1 6100 C4 '
+     
         for (let i = 0; i < jsonData.length; i++) {
                 let b = document.createElement('button')
                 b.title=jsonData[i].Name;
@@ -101,156 +380,6 @@ function getStm() {
         console.error("Error loading the JSON file", error);
         })
     });
-}
-
-function das2() {
-    return getReq(`api/tr/veex/das2`).then((data) => {
-        jsonData2 = data.TAGs;
-        // dasTwo01.innerHTML = ''
-        // dasTwo02.innerHTML = ''
-        // dasTwo11.innerHTML = ''
-        // dasTwo12.innerHTML = ''
-
-        for (let i = 0; i < jsonData2.length; i++) {
-            let b = document.createElement('button')
-            b.title=jsonData2[i].Name;
-            
-            if (jsonData2[i].Name.substring(0,2) == 'XX' || jsonData2[i].Name.includes('Spare')){
-                b.style.backgroundColor = 'greenyellow'
-            }
-            else if (jsonData2[i].Name.includes('Spare') || jsonData2[i].Name.includes('GG') || jsonData2[i].Name.includes('DAS')) b.style.backgroundColor = 'lightskyblue' 
-            else { b.style.backgroundColor = 'brown'; }
-            b.className = 'das-icon'
-            b.addEventListener('click', function() {
-                readIP.textContent = `IP = ${jsonData2[i].IP}`
-                readName.textContent = `Name = ${jsonData2[i].Name}`
-                readChan.textContent = `Channel = ${jsonData2[i].Channel}`
-                if (showVal.checked) window.open(`https://veex.blueorigin.com:5001/Stm/${jsonData2[i].Name}`)
-            })
-         updateDisplay2(jsonData2[i], b)
-        }
-    })
-}
-
-function fvc1() {
-    return getReq(`api/tr/veex/fvc1`).then((data) => {
-        // console.log(data)
-        fvcData1 = data;
-        fvcOne1.innerHTML = ''
-        fvcOne2.innerHTML = ''
-        for (let i = 0; i < data.length; i++) {
-                let b = document.createElement('button')
-                b.title=data[i][0];
-                
-            if (!data[i][0]) {
-                b.style.backgroundColor = 'greenyellow'
-            } else b.style.backgroundColor = 'brown'
-            b.className = 'das-icon'
-            b.addEventListener('click', function() {
-                readIP.textContent = `Name = ${fvcData1[i][0]}`
-                readName.textContent = `Port = ${fvcData1[i][3]}`
-                readChan.textContent = `Channel = ${fvcData1[i][4]}`
-                if (showVal.checked) window.open(`https://veex.blueorigin.com:5001/Stm/${fvcData1[i].Name}`)
-            })
-            updateFVC(fvcData1[i], b, 1, false)
-        }
-    })  
-}
-
-function fvc2() {
-    return getReq(`api/tr/veex/fvc2`).then((data) => {
-        // console.log(data)
-        fvcData2 = data;
-        fvcTwo1.innerHTML = ''
-        fvcTwo2.innerHTML = ''
-        for (let i = 0; i < data.length; i++) {
-                let b = document.createElement('button')
-                b.title=data[i][0];
-                
-            if (!data[i][0]) {
-                b.style.backgroundColor = 'greenyellow'
-            } else b.style.backgroundColor = 'brown'
-            b.className = 'das-icon'
-            b.addEventListener('click', function() {
-                readIP.textContent = `Name = ${fvcData2[i][0]}`
-                readName.textContent = `Port = ${fvcData2[i][3]}`
-                readChan.textContent = `Channel = ${fvcData2[i][4]}`
-                if (showVal.checked) window.open(`https://veex.blueorigin.com:5001/Stm/${fvcData2[i].Name}`)
-            })
-            updateFVC(fvcData2[i], b, 2, false)
-        }
-    })  
-}
-
-function fvcDI1() {
-    return getReq(`api/tr/veex/fvc1di`).then((data) => {
-        // console.log(typeof data)
-        // console.log(data[4][0])
-        // console.log(data)
-        fvcDataDI1 = data;
-        fvcOneDI1.innerHTML = ''
-        fvcOneDI2.innerHTML = ''
-        fvcOneDI3.innerHTML = ''
-        fvcOneDI4.innerHTML = ''
-        for (let i = 0; i < data.length; i++) {
-                let b = document.createElement('button')
-                b.title=data[i][0];
-            if (!data[i][0]) {
-                b.style.backgroundColor = 'greenyellow'
-            } else b.style.backgroundColor = 'brown'
-            b.className = 'das-icon'
-            b.addEventListener('click', function() {
-                readIP.textContent = `Name = ${fvcDataDI1[i][0]}`
-                readName.textContent = `Port = ${fvcDataDI1[i][2]}`
-                readChan.textContent = `Channel = ${fvcDataDI1[i][3]}`
-                if (showVal.checked) window.open(`https://veex.blueorigin.com:5001/Stm/${fvcDataDI1[i].Name}`)
-            })
-            updateFVC(fvcDataDI1[i], b, 1, true)
-        }
-    })  
-}
-
-function fvcDI2() {
-    return getReq(`api/tr/veex/fvc2di`).then((data) => {
-        // console.log(typeof data)
-        // console.log(data[4][0])
-        // console.log(data)
-        fvcDataDI2 = data;
-        fvcTwoDI1.innerHTML = ''
-        fvcTwoDI2.innerHTML = ''
-        fvcTwoDI3.innerHTML = ''
-        fvcTwoDI4.innerHTML = ''
-        for (let i = 0; i < data.length; i++) {
-                let b = document.createElement('button')
-                b.title=data[i][0];
-            if (!data[i][0]) {
-                b.style.backgroundColor = 'greenyellow'
-            } else b.style.backgroundColor = 'brown'
-            b.className = 'das-icon'
-            b.addEventListener('click', function() {
-                readIP.textContent = `Name = ${fvcDataDI2[i][0]}`
-                readName.textContent = `Port = ${fvcDataDI2[i][2]}`
-                readChan.textContent = `Channel = ${fvcDataDI2[i][3]}`
-                if (showVal.checked) window.open(`https://veex.blueorigin.com:5001/Stm/${fvcDataDI2[i].Name}`)
-            })
-            updateFVC(fvcDataDI2[i], b, 2, true)
-        }
-    })  
-}
-
-
-
-
-// This will grab a file from the file system to the server and then send it to the client
-
-function test2() {
-    fvc1()
-}
-
-function test3() {
-    return getText(`api/python`).then((data) => {
-        console.log(data)
-    })
 }
 
 function getSTM(req) {
@@ -301,109 +430,65 @@ function getText(req) {
     //     return returnVal
     // }
 
-function updateDisplay(jsonData, b) {
-ip = jsonData.IP.slice(-2)
-ip2 = jsonData.IP.slice(-6,-4)
-    if (ip2 == '01') {
-        if (ip == '01'){
-            dasOne01.appendChild(b)
-        }
-        if (ip == '02'){
-            dasOne02.appendChild(b)
-        }
-        if (ip == '03'){
-            dasOne03.appendChild(b)
-        }
-        if (ip == '04'){
-            dasOne04.appendChild(b)
-        }
-        if (ip == '05'){
-            dasOne05.appendChild(b)
-        }
-        if (ip == '11'){
-            dasOne11.appendChild(b)
-        }
-        if (ip == '12'){
-            dasOne12.appendChild(b)
-        }
-        if (ip == '13'){
-            dasOne13.appendChild(b)
-        }
-        if (ip == '14'){
-            dasOne14.appendChild(b)
-        }
-    }
-       if (ip2 == '02') {
-        if (ip == '01'){
-            dasTwo01.appendChild(b)
-        }
-        if (ip == '02'){
-            dasTwo02.appendChild(b)
-        }
-        if (ip == '11'){
-            dasTwo11.appendChild(b)
-        }
-        if (ip == '12'){
-            dasTwo12.appendChild(b)
-        }
-   }
-  
+// Make the window draggable
+dragElement(document.getElementById("draggableWindow"));
+
+const dragWindow = document.getElementById('draggableWindow')
+// Store the initial position of the window
+
+let initialWindowOffset = draggableWindow.getBoundingClientRect();
+let initialTop = initialWindowOffset.top + window.scrollY;
+let initialLeft = initialWindowOffset.left + window.scrollX;
+
+
+
+
+
+
+
+function dragElement(element) {
+  let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+  if (document.getElementById(element.id + "Header")) {
+    // if present, the header is where you move the DIV from:
+    document.getElementById(element.id + "Header").onmousedown = dragMouseDown;
+  } else {
+    // otherwise, move the DIV from anywhere inside the DIV:
+    element.onmousedown = dragMouseDown;
+  }
+
+  function dragMouseDown(e) {
+    e.preventDefault();
+    // get the mouse cursor position at startup:
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    document.onmouseup = closeDragElement;
+    // call a function whenever the cursor moves:
+    document.onmousemove = elementDrag;
+  }
+
+  function elementDrag(e) {
+    e.preventDefault();
+    // calculate the new cursor position:
+    pos1 = pos3 - e.clientX;
+    pos2 = pos4 - e.clientY;
+    pos3 = e.clientX;
+    pos4 = e.clientY;
+    // set the element's new position:
+    element.style.top = (element.offsetTop - pos2) + "px";
+    element.style.left = (element.offsetLeft - pos1) + "px";
+  }
+
+  function closeDragElement() {
+    // stop moving when mouse button is released:
+    document.onmouseup = null;
+    document.onmousemove = null;
+  }
 }
 
-function updateDisplay2(jsonData, b) {
-    ip = jsonData.IP.slice(-2)
-   // ip2 = jsonData.IP.slice(-6,-4)
- //   if (ip2 == '02') {
-        if (ip == '01'){
-            dasTwo01.appendChild(b)
-        }
-        if (ip == '02'){
-            dasTwo02.appendChild(b)
-        }
-        if (ip == '11'){
-            dasTwo11.appendChild(b)
-        }
-        if (ip == '12'){
-            dasTwo12.appendChild(b)
-        }
-  //  }
-}
-    
-function updateFVC(data, b, box, di) {
-    r = data[3] // card for DO
-    c = data[1] // chassis number for DI
-    if (di) {
-        r = data[2] // card for DI
-        if (c == 0) {
-            if (box === 1) {
-                if (r < 8) fvcOneDI1.appendChild(b)
-                if (r > 7) fvcOneDI2.appendChild(b)
-            }
-            if (box === 2) {
-                if (r < 8) fvcTwoDI1.appendChild(b)
-                if (r > 7) fvcTwoDI2.appendChild(b)
-            }
-        }
-        if (c == 1) {
-            if (box === 1) {
-                if (r < 8) fvcOneDI3.appendChild(b)
-                if (r > 7) fvcOneDI4.appendChild(b)
-            }
-            if (box === 2) {
-                if (r < 8) fvcTwoDI3.appendChild(b)
-                if (r > 7) fvcTwoDI4.appendChild(b)
-            }
-        }
-    }
-    else {
-        if (box === 1) {
-            if (r < 8) fvcOne1.appendChild(b)
-            if (r > 7) fvcOne2.appendChild(b)
-        }
-        if (box === 2) {
-            if (r < 8) fvcTwo1.appendChild(b)
-            if (r > 7) fvcTwo2.appendChild(b)
-        }
-    }
-}
+// Handle the scroll event
+window.addEventListener('scroll', function() {
+    draggableWindow.style.top = (initialTop + window.scrollY) + 'px';
+    draggableWindow.style.left = (initialLeft + window.scrollX) + 'px';
+  });
+
 

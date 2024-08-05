@@ -13,6 +13,9 @@ const emailBox = document.querySelector('#username')
 const passwordBox = document.querySelector('#password')
 const createAccount = document.getElementById('create-account')
 const logoutButton = document.querySelector('#logout-button')
+const screenW = window.innerWidth;
+const btnW = screenW * 0.9 / 58
+
 
 // Header constants
 const myIP = 'http://10.144.208.81:4000/'
@@ -157,5 +160,78 @@ function delay(milliseconds) {
     console.log('End');
   }
   
+
+function colorIcons(b, name, ch) {
+
+    b.addEventListener('contextmenu', function(e) {
+        e.preventDefault();
+        menu.style.display = 'block'
+        menu.style.left = e.pageX + 'px'
+        menu.style.top = e.pageY +'px'
+        
+        displayClasses.addEventListener('click', function() { // This is for button 1
+            displayClasses.className = e.target.classList.value
+            displayClasses.dataset.value = ch;
+            infoObject = {one: 'one', two: 'two'}
+            displayClasses.dataset.info = JSON.stringify(infoObject)
+
+            // das1Target.innerHTML = `
+            // <p>${Array.from(buttonClasses).join(',')}</p>`
+        })
+
+        writeName.addEventListener('click', function() { //This is for button 2
+            writeName.className = e.target.classList.value
+            writeName.dataset.value = name
+            infoObject = {name: name, ch: ch}
+            writeName.dataset.info = JSON.stringify(infoObject)
+        })
+
+        writeValue.addEventListener('click', function() {// This is for button 3
+
+        })
+        
+        return false;
+    })
+
+    b.addEventListener('mouseover', function() {
+        b.style.backgroundColor = 'black'
+        if (b.style.color != 'red') {
+            b.style.color = 'lightskyblue'
+        }
+    })
+    if (name.length === 0) {
+        b.style.backgroundColor = 'greenyellow'
+        b.addEventListener('mouseout', function() {
+            b.style.backgroundColor = 'greenyellow'
+            if (b.style.color != 'red') {
+                b.style.color = 'black'
+            }
+        })
+    } else { 
+        b.style.backgroundColor = 'rgb(179, 34, 179)'
+        b.addEventListener('mouseout', function() {
+            b.style.backgroundColor = 'rgb(179, 34, 179)'
+            if (b.style.color != 'red') {
+                b.style.color = 'black'
+            }
+        })
+    }
+    b.style.width = btnW + 'px'
+    b.style.height = btnW + 'px'
+    b.style.color = 'black';
+    b.title = name
+    return b
+}
+
+function csvObj(sec, loc, name) {
+    obj = {
+        sec: sec,
+        location: parseInt(loc),
+        name: name
+    }
+    return obj
+}
+
+
 
   

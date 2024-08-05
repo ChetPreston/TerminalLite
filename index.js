@@ -19,7 +19,7 @@ const fs = require('fs')
 // const EventEmitter = require('events')
 const cors = require("cors")
 // const { spawn } = require('child_process');
-// const { exec } = require('child_process')
+const { exec } = require('child_process')
 // const mysql = require('mysql2')
 // const {Builder, Browser, By, Key, until} = require('selenium-webdriver');
 // const axios = require('axios');
@@ -28,6 +28,7 @@ const cors = require("cors")
 // const jwt = require('jsonwebtoken')
 // const csv = require('csv-parser')
 const {parse} = require('csv-parse');
+const readline = require('readline')
 // const { readXls } = require('read-excel-file/node');
 // const authRoutes = require('./routes/authRoutes')
 // const commentRoutes = require('./routes/commentRoutes')
@@ -54,6 +55,10 @@ const { default: createTRPage } = require('./public/js/tr');
 // @01 ESTABLISH ARCHITECTURES AND CONNECTIONS
 //////////////////////////////////////////
 const jwtSecret = '28d1a301afccb72337f6f4d5b3270495869bae3690a2b3f4b0bc61674e9a0da01ad99d'
+const rl = readline.createInterface({
+    input: process.stdin,
+    output: process.stdout
+})
 app.use(express.json());
 app.use(cors());
 // app.use(bodyParser.json());
@@ -107,6 +112,45 @@ app.get('/xeexTR', (req, res) => res.render('xeexTR'))
 //     res.json('imageName')
 //     return imageName
 // })
+
+app.post('/svn', (req, res) => {
+    const { mode, site, enterPW } = req.body
+    // console.log(enterPW)
+    fold = `C:/SVN/Configs_and_Batches/Test_Stand_Configs/${site}/system_configs`
+    // command = `svn ${mode} ${fold} -m app "app commit"`
+    if (mode == 'update') {
+        command = `svn ${mode} ${fold}`
+        exec(command, (error, stdout, stderr) => {
+            if (error) {
+                console.error(`Error ${error.message}`)
+                return
+            }
+            if (stderr) {
+                console.error(`stderr: ${stderr}`)
+                return
+            }
+            console.log(stdout)
+        })
+    }
+    else if (mode == 'commit') {
+        if (enterPW == 'frankortiz') {
+            command = `svn ${mode} ${fold} -m "app commit"`
+            exec(command, (error, stdout, stderr) => {
+                if (error) {
+                    console.error(`Error ${error.message}`)
+                    return
+                }
+                if (stderr) {
+                    console.error(`stderr: ${stderr}`)
+                    return
+                }
+                console.log(stdout)
+            })
+        }
+        else alert('Wrong password!')
+        
+    }
+})
 
 
 // const storage = multer.diskStorage({

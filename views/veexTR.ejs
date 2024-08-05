@@ -4,6 +4,10 @@
     <head>
         <link rel="stylesheet" href="css/veexTR.css">
         <%- include('header'); -%>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.0/papaparse.min.js"></script>
+        <script src="https://unpkg.com/htmx.org@2.0.0" 
+            integrity="sha384-wS5l5IKJBvK6sPTKa2WZ1js3d947pvWXbPJ1OmWfEuxLgeHcEbjUUA5i9V5ZkpCw"
+            crossorigin="anonymous"></script>
     </head>
     <body>
         <h3 id="terminal-title">VEEx Terminal</h3>
@@ -19,88 +23,55 @@
                 <input type="checkbox" id="show-val">
             </p>
         </div>
-        <div id="das">
-            <div id="first-das">
-                <div class="das-text">
-                    <p>DAS1 6150 C1</p>
-                    <p>DAS1 6150 C2</p>
-                    <p>DAS1 6150 C3</p>
-                    <p>DAS1 6150 C4</p>
-                    <p>DAS1 6150 C5</p>
-                    <p>DAS1 6100 C1</p>
-                    <p>DAS1 6100 C2</p>
-                    <p>DAS1 6100 C3</p>
-                    <p>DAS1 6100 C4</p>     
-                </div>
-                <div class="das-btns">
-                    <div  class="das1" id="das-one01"></div>
-                    <div  class="das1" id="das-one02"></div>
-                    <div  class="das1" id="das-one03"></div>
-                    <div  class="das1" id="das-one04"></div>
-                    <div  class="das1" id="das-one05"></div>
-                    <div  class="das1" id="das-one11"></div>
-                    <div  class="das1" id="das-one12"></div>
-                    <div  class="das1" id="das-one13"></div>
-                    <div  class="das1" id="das-one14"></div>
-                </div>
+        <div id="search-div">
+            <div id="search-form-div">
+                <input type="text" name="search" id='search-box' autocomplete="off">
+                <button id="search-btn">Search</button>
             </div>
-            <div id="second-das">
-                <div class="das-text">
-                    <p>DAS2 6150 C1</p>
-                    <p>DAS2 6150 C2</p>
-                    <p>DAS2 6100 C1</p>
-                    <p>DAS2 6100 C2</p>    
-                </div>
-                <div class="das-btns">
-                    <div  class="das2" id="das-two01"></div>
-                    <div  class="das2" id="das-two02"></div>
-                    <div  class="das2" id="das-two11"></div>
-                    <div  class="das2" id="das-two12"></div>
-                </div>
-            </div>
-            <div id="first-fvc">
-                <div class="das-text">
-                    <p>FVC1 DO 0-7</p>
-                    <p>FVC1 DO 8-15</p>
-                    <p>FVC1 DI C0 0-7</p>
-                    <p>FVC1 DI C0 8-15</p>
-                    <p>FVC1 DI C1 0-7</p>
-                    <p>FVC1 DI C1 8-15</p>     
-                </div>
-                <div class="das-btns">
-                    <div class="fvc1" id="fvc-one1">FVC1</div>
-                    <div class="fvc1" id="fvc-one2">FVC1</div>
-                    <div class="fvc1" id="fvc-one1di">FVC1</div>
-                    <div class="fvc1" id="fvc-one2di">FVC1</div>
-                    <div class="fvc1" id="fvc-one3di">FVC1</div>
-                    <div class="fvc1" id="fvc-one4di">FVC1</div>
-                </div>
-            </div>
-            <div id="second-fvc">
-                <div class="das-text">
-                    <p>FVC2 DO 0-7</p>
-                    <p>FVC2 DO 8-15</p>
-                    <p>FVC2 DI C0 0-7</p>
-                    <p>FVC2 DI C0 8-15</p>
-                    <p>FVC2 DI C1 0-7</p>
-                    <p>FVC2 DI C1 8-15</p>     
-                </div>
-                <div class="das-btns">
-                    <div class="fvc2" id="fvc-two1">FVC2</div>
-                    <div class="fvc2" id="fvc-two2">FVC2</div>
-                    <div class="fvc2" id="fvc-two1di">FVC2</div>
-                    <div class="fvc2" id="fvc-two2di">FVC2</div>
-                    <div class="fvc2" id="fvc-two3di">FVC2</div>
-                    <div class="fvc2" id="fvc-two4di">FVC2</div>
-                </div>
+            <div id="search-results-div">
+
             </div>
         </div>
-        <div id="div-id">
+        <div class="draggable-window" id="draggableWindow">
+            <div class="window-header" id="windowHeader">Display Info</div>
+            <div class="window-content">
+               
+                <div id="display-info" class="display-read"></div>
+            </div>
+          </div>
+        <div>
+            <h2>DAS CHANNELS</h2>
+            <!-- <div id="das1-target" class="display-read"></div> -->
+            <div id="das"></div>
+        </div>
+
+        <div>
+            <h2>FVC DO CHANNELS</h2>
+            <!-- <div id="fvc-do-target"></div> -->
+            <div id="fvc-do"></div>
+        </div>
+        <div>
+            <h2>FVC DI CHANNELS</h2>
+            
+            <!-- <div id="fvc-di-target"></div> -->
+            <div id="fvc-di"></div>
+        </div>
+        <!-- <div id="div-id">
             <p id="read-name"></p>
             <p id="read-ip"></p>
             <p id="read-chan"></p>
             <p id="read-val"></p>
+        </div> -->
+        <div id="custom-menu" class="custom-menu">
+            <ul>
+            <li data-action="action1" id="display-classes">Read Value</li>
+            <li data-action="action2" id="write-name">Write Name</li>
+            <li data-action="action3" id="write-value">Write Value</li>
+            </ul>
         </div>
+        <button id='svn-update'>UPDATE</button>
+        <button id="svn-commit">COMMIT</button>
+        
         <script src="js/veexTR.js"></script>
     </body> 
 </html>
