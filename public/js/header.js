@@ -169,6 +169,7 @@ function colorIcons(b, name, ch) {
         menu.style.left = e.pageX + 'px'
         menu.style.top = e.pageY +'px'
         
+        
         displayClasses.addEventListener('click', function() { // This is for button 1
             displayClasses.className = e.target.classList.value
             displayClasses.dataset.value = ch;

@@ -219,7 +219,7 @@ menu.addEventListener('click', function(e) {
         console.log(dataInfo)
         // console.log(e.target.textContent)
         // cVal = fetch(`http://veex.blueorigin.com:5000/Stm/TC-E0930`)
-        console.log(fetch(`http://geex.blueorigin.com:5000/Stm/TC-E0930`))
+        console.log(fetch(`http://xeex.blueorigin.com:5000/Stm/TC-E0930`))
         if (cName.includes('DAS')) {
             
         }
@@ -336,7 +336,7 @@ function getFVC(data, name) {
             `
             if (showVal.checked) window.open(`https://xeex.blueorigin.com:5001/Stm/${data[i][0]}`)
         })
-        b = colorIcons(b, data[i][0])
+        b = colorIcons(b, data[i][0], i)
         fvcDoDiv.appendChild(b)
     }
     const br = document.createElement('br')
@@ -358,7 +358,7 @@ function getFVC_DI(data, name) {
             `
             if (showVal.checked) window.open(`https://xeex.blueorigin.com:5001/Stm/${data[i][0]}`)
         })
-        b = colorIcons(b, data[i][0])
+        b = colorIcons(b, data[i][0], i)
         
         fvcDiDiv.appendChild(b)
     }
@@ -381,7 +381,7 @@ function getDAS(data, name) {
             `
             if (showVal.checked) window.open(`https://xeex.blueorigin.com:5001/Stm/${data[i].Name}`)
         })
-        b = colorIcons(b, data[i].Name)
+        b = colorIcons(b, data[i].Name, i)
         dasDiv.appendChild(b)
     }
     const br = document.createElement('br')

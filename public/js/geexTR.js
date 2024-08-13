@@ -220,7 +220,6 @@ menu.addEventListener('click', function(e) {
         var buttonClasses = e.target.classList
         console.log('Clicked on choice:', action)
         const cName = e.target.classList.value
-        console.log(e.target.classList.value)
         let dataInfo = JSON.parse(e.target.dataset.info)
         newCh = dataInfo.ch
         newName = prompt('Enter the new tag name:')
@@ -248,7 +247,6 @@ menu.addEventListener('click', function(e) {
                     outData = csvObj('GEExDAS5', newCh, newName)
                     postReq(outData, 'api/tr/geex/das')
                 }
-                
                 else if (cName.includes('FVC-DI 1')) {
                     outData = csvObj('GEEx_FVC1_DI', newCh, newName)
                     console.log(outData)
@@ -269,25 +267,20 @@ menu.addEventListener('click', function(e) {
                     console.log(outData)
                     postReq(outData, `api/tr/geex/fvc`)
                 }
-                else if (cName.includes('FVC-DO 1')) {
-                    outData = csvObj('GEEx_FVC1_Valve_Configuration', newCh, newName)
+                else if (cName.includes('BE-3 PM')) {
+                    outData = csvObj('BE-3PM_Test_Article_Valve_Configuration', newCh, newName)
                     console.log(outData)
                     postReq(outData, `api/tr/geex/fvcdo`)
                 }
-                else if (cName.includes('FVC-DO 2')) {
-                    outData = csvObj('GEEx_FVC1_Valve_Configuration', newCh, newName)
+                else if (cName.includes('Facility')) {
+                    outData = csvObj('Facility_Valves_Configuration', newCh, newName)
                     console.log(outData)
                     postReq(outData, `api/tr/geex/fvcdo`)
                 }
-                    // getReq(`api/tr/veex/fvc/VEEx_FVC1_DI/2`).then((data) => {
-                    //     console.log(data[0])
-                    //     newTag = prompt('Enter ID number for the channel you want to rename on FVC DI 1:') 
-                    //     newName = prompt('Enter the new tag name:')
-                    //     console.log(newTag + ' ' + newName)
-                    // })
-
-                else if (cName.includes('FVC-DO')) {
-
+                else if (cName.includes('FVC4')) {
+                    outData = csvObj('FVC4_Valves_Configuration', newCh, newName)
+                    console.log(outData)
+                    postReq(outData, `api/tr/geex/fvcdo`)
                 }
                 window.location.reload()
             }
@@ -319,7 +312,7 @@ function getFVC(data, name) {
             `
             if (showVal.checked) window.open(`https://geex.blueorigin.com:5001/Stm/${data[i][0]}`)
         })
-        b = colorIcons(b, data[i][0])
+        b = colorIcons(b, data[i][0], i)
         fvcDoDiv.appendChild(b)
     }
     const br = document.createElement('br')
@@ -341,7 +334,7 @@ function getFVC_DI(data, name) {
             `
             if (showVal.checked) window.open(`https://veex.blueorigin.com:5001/Stm/${data[i][0]}`)
         })
-        b = colorIcons(b, data[i][0])
+        b = colorIcons(b, data[i][0], i)
         
         fvcDiDiv.appendChild(b)
     }
@@ -364,7 +357,7 @@ function getDAS(data, name) {
             `
             if (showVal.checked) window.open(`https://veex.blueorigin.com:5001/Stm/${data[i].Name}`)
         })
-        b = colorIcons(b, data[i].Name)
+        b = colorIcons(b, data[i].Name, i)
         dasDiv.appendChild(b)
     }
     const br = document.createElement('br')

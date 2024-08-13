@@ -102,19 +102,19 @@ module.exports.set_veex_fvcdo = (req, res) => {
     const { sec, location, name } = req.body
     let start
     let results = [];
-    if (sec.includes('FVC2')) start = location + 77
-    else if (sec.includes('FVC1')) start = location + 105
+    if (sec.includes('FVC2')) start = location + 76
+    else if (sec.includes('FVC1')) start = location + 103
     const filePath = fold + 'VEEx/system_configs/valve_controllers/' + sec + '.csv'
-    console.log(typeof filePath)
     const csvContent = fs.readFileSync(filePath, 'utf8');
-    console.log(start)
+    // console.log(start)
     // console.log(typeof csvContent);
 
 
    // Assume 'csvContent' holds the CSV file content
     confiG = { 
         delimiter: "", // Auto-detect delimiters
-        header: true,  // No header row
+        newline: "",
+        header: false,  // No header row
         dynamicTyping: true,  // Parse numerical values as numbers
         skipEmptyLines: true,  // Skip empty lines
         complete: function(results) {
@@ -123,16 +123,27 @@ module.exports.set_veex_fvcdo = (req, res) => {
         // Process the data as needed
         }
     }
+    config2 = {
+        quotes: false, //or array of booleans
+        quoteChar: '"',
+        escapeChar: '"',
+        delimiter: ",",
+        header: false,
+        newline: "\r\n",
+        skipEmptyLines: false, //other option is 'greedy', meaning skip delimiters, quotes, and whitespace.
+        columns: null //or array of strings
+    }
     woah = Papa.parse(csvContent, confiG);
+    // console.log(woah.data)
     // console.log(woah.data[115]['FILEVERSION'])
-    woah.data[start-3]['FILEVERSION'] = name
-    heyo = Papa.unparse(woah, confiG)
+    woah.data[start][0] = name
+    heyo = Papa.unparse(woah, config2)
     fs.writeFileSync(filePath, heyo, 'utf8')
     // console.log(heyo)
 
   
         // results[location][0] = name
-        res.send(results)
+    res.send(woah.data)
 }
 
 module.exports.set_veex_das = (req, res) => {
@@ -145,6 +156,68 @@ module.exports.set_veex_das = (req, res) => {
     fs.writeFileSync(fold + 'VEEx/system_configs/DAS/' + sec + '.json', JSON.stringify(data, null, 2), 'utf8')
     // console.log(data)
 
+}
+
+module.exports.set_geex_fvc = (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    const { sec, location, name } = req.body
+    let start
+    let results = [];
+    start = location +1
+
+   
+    fs.createReadStream(fold + 'GEEx/system_configs/valve_controllers/' + sec + '.csv')
+    .pipe(parse({ delimiter: ",", from_line: 1})) //This might need to be custom per FVC per TS
+    .on('data', function(row) {
+        results.push(row)
+    })
+    .on("end", function() {  
+        writeToCSVLine(results, fold + 'GEEx/system_configs/valve_controllers/' + sec + '.csv', name, start)
+    })
+}
+
+module.exports.set_geex_fvcdo = (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    const { sec, location, name } = req.body
+    let start
+    let results = [];
+    if (sec.includes('FVC4')) start = location + 77
+    else if (sec.includes('BE-3')) start = location + 104
+    else if (sec.includes('Facility')) start = location + 77
+    const filePath = fold + 'GEEx/system_configs/valve_controllers/' + sec + '.csv'
+    const csvContent = fs.readFileSync(filePath, 'utf8');
+    confiG = { 
+        delimiter: "", // Auto-detect delimiters
+        newline: "",
+        header: false,  // No header row
+        dynamicTyping: true,  // Parse numerical values as numbers
+        skipEmptyLines: true,  // Skip empty lines
+        complete: function(results) {
+        }
+    }
+    config2 = {
+        quotes: false, //or array of booleans
+        quoteChar: '"',
+        escapeChar: '"',
+        delimiter: ",",
+        header: false,
+        newline: "\r\n",
+        skipEmptyLines: false, //other option is 'greedy', meaning skip delimiters, quotes, and whitespace.
+        columns: null //or array of strings
+    }
+    woah = Papa.parse(csvContent, confiG);
+    woah.data[start][0] = name
+    heyo = Papa.unparse(woah, config2)
+    fs.writeFileSync(filePath, heyo, 'utf8')
+    res.send(woah.data)
+}
+
+module.exports.set_geex_das = (req, res) => {
+    res.set('Access-Control-Allow-Origin', '*');
+    const { sec, location, name } = req.body
+    let data = JSON.parse(fs.readFileSync(fold + 'GEEx/system_configs/DAS/' + sec + '.json'))
+    data.TAGs[location].Name = name;
+    fs.writeFileSync(fold + 'GEEx/system_configs/DAS/' + sec + '.json', JSON.stringify(data, null, 2), 'utf8')
 }
 
 module.exports.search_veex = (req, res) => {

@@ -218,7 +218,7 @@ menu.addEventListener('click', function(e) {
                     outData = csvObj('VEExDAS1', newCh, newName)
                     postReq(outData, 'api/tr/veex/das')
                 }
-                if (cName.includes('DAS2')) {
+                else if (cName.includes('DAS2')) {
                     outData = csvObj('VEExDAS2', newCh, newName)
                     postReq(outData, 'api/tr/veex/das')
                 }
@@ -238,14 +238,9 @@ menu.addEventListener('click', function(e) {
                     postReq(outData, `api/tr/veex/fvcdo`)
                 }
                 else if (cName.includes('FVC-DO 2')) {
-                    outData = csvObj('VEEx_FVC1_Valve_Configuration', newCh, newName)
+                    outData = csvObj('VEEx_FVC2_Valve_Configuration', newCh, newName)
                     console.log(outData)
                     postReq(outData, `api/tr/veex/fvcdo`)
-                }
-         
-
-                else if (cName.includes('FVC-DO')) {
-
                 }
                 window.location.reload()
             }
@@ -256,7 +251,7 @@ menu.addEventListener('click', function(e) {
     if (action === 'action3') {
         console.log('Clicked on choice:', action)
         displayInfo.innerHTML = `
-        <p></p>
+        <p>Sorry, this doesn't work!</p>
         `
     }
 })
@@ -273,11 +268,13 @@ function getDAS(data, name) {
         // b.style.width = btnW + 'px'
         // b.style.height = btnW + 'px'
         b.addEventListener('click', function() {
+            newVal = getSTM(`http://veex.blueorigin.com:5001/Stm/${data[i].Name}`)
             displayInfo.innerHTML = `
             <p>Device = ${name}</p>
             <p>IP = ${data[i].IP}</p>
             <p>Name = ${data[i].Name}</p>
             <p>Channel = ${data[i].Channel}</p>
+            <p>Value = ${newVal}
             `
             if (showVal.checked) window.open(`https://veex.blueorigin.com:5001/Stm/${data[i].Name}`)
         })
@@ -389,7 +386,7 @@ function getSTM(req) {
     })
     .then(response => {
       if (!response.ok) {
-        throw new Error('Sorry, Network response was not ok');
+        throw new Error('Sorry, Network response was not ok (getSTM)');
       }
       return response.json().then((data) => {
         return data;
